@@ -1,13 +1,27 @@
-// lib/app.ts
-import express = require('express');
+// app.ts
+import express from 'express';
+import bodyParser from 'body-parser';
 
 // Create a new express application instance
-const app: express.Application = express();
+const app = express();
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+/* Database configuration */
+import database from './config/dbconfig';
+
+/* Init database */
+database.init();
+
+/* Init server listening */
+const port = process.argv[2] || 3000;
+app.listen(port, function () {
+    console.log("Server listening on port : " + port);
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+/* Express configuration */
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+/* Router configuration */
+const REST_API_ROOT = '/api';
+app.use(REST_API_ROOT, require('./routes/router'));
+
