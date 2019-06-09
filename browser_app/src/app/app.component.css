@@ -1,0 +1,84 @@
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.filler {
+  flex: 1;
+}
+
+.side-width {
+  flex: 0 0 350px;
+}
+
+.icon {
+  flex: 0 0 35px;
+  width: 35px;
+  height: 35px;
+  margin: 10px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: yellow;
+  margin-left: 10px;
+}
+
+.map-tab {
+  width: calc(350px - 0px);
+  height: 100%;
+  background-color: tan;
+}
+
+.tool-tab {
+  height: 100%;
+  background-color: pink;
+}
+
+.search-tab {
+  height: 100%;
+  background-color: salmon;
+}
+
+.map-picker {
+  position: absolute;
+  left: 5;
+  height: 350px;
+  width: 350px;
+  background-color: tan;
+}
+
+.map-contents {
+  background-color: lightgreen;
+  text-align: center;
+}
+
+.point-list {
+  background-color: salmon;
+}
+
+.appbox {
+  margin: 0;
+  /*
+  max-height: 100vh;
+  overflow: auto;
+  */
+    height: 800px;
+}
+
+.appbox .header {
+  flex: 0 1 auto;
+}
+
+.appbox .content {
+  flex: 1 1 auto;
+}
+
+.round-tabs {
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+}
+

@@ -1,21 +1,71 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
+<div class="appbox column" style="height:calc(100vh - 20px);">
+  <div class="header row">
+
+    <div class="filler row">
+      <div class="map-tab round-tabs row">
+        <div class="filler">
+          map tab
+        </div>
+
+        <div class="icon">
+          ^
+        </div>
+      </div>
+      <div class="tool-tab  row">
+
+        <div class="icon">
+          A
+        </div>
+        <div class="icon">
+          D
+        </div>
+        <div class="icon">
+          M
+        </div>
+      </div>
+
+    </div>
+    <div class="side-width search-tab round-tabs row">
+      <div class="icon">
+        >
+      </div>
+      <div class="filler">
+        search
+      </div>
+
+    </div>
+  </div>
+  <div class="content row" style="height: 85%; ">
+    <div class="map-contents filler">
+      <div class="map-picker"  style="z-index: 2;">
 
 <ag-grid-angular
-    style="width: 500px; height: 500px;"
+    style="width: 100%; height: 100%;"
     class="ag-theme-balham"
     [rowData]="rowData"
     [columnDefs]="columnDefs"
     >
 </ag-grid-angular>
 
-<div style="width: 400px; height: 300px;"
+      </div>
+
+<div style="width: 100%; height: 100%; z-index: 1;"
      leaflet 
      [leafletOptions]="options">
+</div>
+
+    </div>
+    <div class="point-list side-width column">
+
+<ag-grid-angular
+    style="width: 100%; height: 100%;"
+    class="ag-theme-balham"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    >
+</ag-grid-angular>
+
+    </div>
+  </div>
 </div>
 
