@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 
-import { tileLayer, latLng } from 'leaflet';
+import { tileLayer, latLng, Map } from 'leaflet';
 
 import {Coordinate} from "tsgeo/Coordinate";
 import {Vincenty}   from "tsgeo/Distance/Vincenty";
@@ -32,8 +32,18 @@ export class AppComponent implements AfterViewInit {
 		    tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
 	    ],
 	    zoom: 5,
-	    center: latLng(46.879966, -121.726909)
+        center: latLng(46.879966, -121.726909),
+
+        editable: true
         };
+
+  onMapReady(map: Map) {
+    console.log("map is ready!")
+  }
+
+  onMapClick(e) {
+    console.log("You clicked the map at " + e.latlng);
+  }
 
   ngAfterViewInit() {
 

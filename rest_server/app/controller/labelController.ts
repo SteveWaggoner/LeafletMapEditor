@@ -33,8 +33,12 @@ class LabelController {
      * Finds all entities.
      * @return all entities
      */
-    findAll(res) {
-        this.labelDao.findAll()
+     findAll(req, res) {
+        let limit = req.query['limit'];
+        let offset = req.query['offset'];
+        let text = req.query['text'];
+
+        this.labelDao.findAll(limit,offset,text)
             .then(this.common.findSuccess(res))
             .catch(this.common.findError(res));
     };

@@ -28,9 +28,11 @@ class LabelDao {
      * Finds all entities.
      * @return all entities
      */
-    findAll() {
-        let sqlRequest = "SELECT * FROM label";
-        return this.common.findAll(sqlRequest).then(rows => {
+    findAll(limit:number=100,offset:number=0,text='%') {
+        let sqlRequest = "SELECT * FROM label WHERE text LIKE $text ORDER BY id LIMIT $limit OFFSET $offset";
+        let sqlParams = {$text: text, $limit: limit, $offset: offset};
+        console.log(sqlParams)
+        return this.common.findAll(sqlRequest, sqlParams).then(rows => {
             let labels = [];
             for (const row of rows) {
                 labels.push(new Label(row.id, row.text, row.x, row.y));

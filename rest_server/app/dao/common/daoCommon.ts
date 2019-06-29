@@ -8,10 +8,12 @@ import { DaoError } from './daoError';
 export
 class DaoCommon {
 
-    findAll(sqlRequest) {
+    findAll(sqlRequest, sqlParams={}) {
         return new Promise(function (resolve, reject) {
-            database.db.all(sqlRequest, function (err, rows) {
+            let stmt = database.db.prepare(sqlRequest);
+            stmt.all(sqlParams, function (err, rows) {
                 if (err) {
+                    console.log(err)
                     reject(
                         new DaoError(20, "Internal server error")
                     );

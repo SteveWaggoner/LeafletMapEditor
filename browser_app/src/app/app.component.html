@@ -51,7 +51,9 @@
 
 <div style="width: 100%; height: 100%; z-index: 1;"
      leaflet 
-     [leafletOptions]="options">
+     [leafletOptions]="options"
+     (leafletMapReady)="onMapReady($event)"
+     (leafletClick)="onMapClick($event)">
 </div>
 
     </div>

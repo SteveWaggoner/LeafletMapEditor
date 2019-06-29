@@ -18,7 +18,7 @@ router.get('/:id', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    labelController.findAll(res);
+    labelController.findAll(req, res);
 });
 
 router.put('/:id', function (req, res) {
