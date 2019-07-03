@@ -5,13 +5,14 @@
   "main": "index.js",
   "dependencies": {
     "@types/express": "^4.16.1",
-    "express": "^4.17.0",
-    "ts-node-dev": "^1.0.0-pre.39",
-    "typescript": "^3.4.5",
+    "bluebird": "*",
     "body-parser": "*",
+    "cors": "^2.8.5",
     "ejs": "*",
+    "express": "^4.17.0",
     "sqlite": "*",
-    "bluebird": "*"
+    "ts-node-dev": "^1.0.0-pre.39",
+    "typescript": "^3.4.5"
   },
   "devDependencies": {},
   "scripts": {

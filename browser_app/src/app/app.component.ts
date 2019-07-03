@@ -1,10 +1,17 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { tileLayer, latLng, Map } from 'leaflet';
+
+import * as L from 'leaflet';
 
 import {Coordinate} from "tsgeo/Coordinate";
 import {Vincenty}   from "tsgeo/Distance/Vincenty";
 import {Polygon}   from "tsgeo/Polygon";
+
+
+import { LabelService } from './label.service';
+import { Label } from './label';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +19,7 @@ import {Polygon}   from "tsgeo/Polygon";
   styleUrls: ['./app.component.css']
   })
 
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit,  OnInit {
   title = 'browser-app';
 
   columnDefs = [
@@ -37,13 +44,42 @@ export class AppComponent implements AfterViewInit {
         editable: true
         };
 
+mymap: Map;
   onMapReady(map: Map) {
-    console.log("map is ready!")
+  console.log("map is ready!")
+  this.mymap = map;
   }
 
   onMapClick(e) {
     console.log("You clicked the map at " + e.latlng);
   }
+
+  //
+  // https://www.concretepage.com/angular-2/angular-2-http-get-example
+  //
+  observableLabels: Observable<Label[]>
+  labels: Label[];
+  errorMessage: String;
+  constructor(private labelService: LabelService) { 
+  }
+
+  ngOnInit(): void {
+      this.observableLabels = this.labelService.getLabelsWithObservable();
+	  this.observableLabels.subscribe(
+            labels => this.labels = labels,
+            error => this.errorMessage = <any>error);
+  }
+
+  addMarkerToMap(labels: Label[]) {
+        for (var label in labels) {
+            console.log(labels[label].text)
+            console.log(labels[label].x)
+            console.log(labels[label].y)
+
+            var marker = L.marker([labels[label].y, labels[label].x]).addTo(this.mymap);
+        }
+    }
+
 
   ngAfterViewInit() {
 
@@ -69,6 +105,8 @@ export class AppComponent implements AfterViewInit {
 
     console.log(geofence.contains(outsidePoint)); // returns bool(false) the point is outside the polygon
     console.log(geofence.contains(insidePoint)); // returns bool(true) the point is inside the polygon
+
+    this.observableLabels.subscribe( labels => this.addMarkerToMap(labels) )
 
   }
 }

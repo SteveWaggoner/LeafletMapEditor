@@ -5,6 +5,11 @@ import bodyParser from 'body-parser';
 // Create a new express application instance
 const app = express();
 
+// https://medium.com/@alexishevia/using-cors-in-express-cac7e29b005b
+var cors = require('cors');
+app.use(cors());
+
+
 /* Database configuration */
 import database from './config/dbconfig';
 
