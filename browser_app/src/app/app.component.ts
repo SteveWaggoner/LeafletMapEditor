@@ -14,12 +14,131 @@ import {Polygon} from 'tsgeo/Polygon';
 import {LabelService} from './label.service';
 import {Label} from './label';
 
+
+//     "@types/leaflet": "^1.4.4",
+
+
+// http://jsfiddle.net/sowelie/3JbNY/
+var MyCustomMarker = L.Marker.extend({
+
+        bindPopup: function (htmlContent, options) {
+
+            if (options && options.showOnMouseOver) {
+
+                // call the super method
+                L.Marker.prototype.bindPopup.apply(this, [htmlContent, options]);
+
+                // unbind the click event
+                this.off('click', this.openPopup, this);
+
+                // bind to mouse over
+                this.on('mouseover', function (e) {
+
+                    // get the element that the mouse hovered onto
+                    var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
+                    var parent = this._getParent(target, 'leaflet-popup');
+
+                    // check to see if the element is a popup, and if it is this marker's popup
+                    if (parent == this._popup._container)
+                        return true;
+
+                    // show the popup
+                    this.openPopup();
+
+                }, this);
+
+                // and mouse out
+                this.on('mouseout', function (e) {
+
+                    // get the element that the mouse hovered onto
+                    var target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
+
+                    // check to see if the element is a popup
+                    if (this._getParent(target, 'leaflet-popup')) {
+
+                        L.DomEvent.on(this._popup._container, 'mouseout', this._popupMouseOut, this);
+                        return true;
+
+                    }
+
+                    // hide the popup
+                    this.closePopup();
+
+                }, this);
+
+            }
+
+        },
+
+        _popupMouseOut: function (e) {
+
+            // detach the event
+            L.DomEvent.off(this._popup, 'mouseout', this._popupMouseOut, this);
+
+            // get the element that the mouse hovered onto
+            var target = e.toElement || e.relatedTarget;
+
+            // check to see if the element is a popup
+            if (this._getParent(target, 'leaflet-popup'))
+                return true;
+
+            // check to see if the marker was hovered back onto
+            if (target == this._icon)
+                return true;
+
+            // hide the popup
+            this.closePopup();
+
+        },
+
+        _getParent: function (element, className) {
+
+            var parent = element.parentNode;
+
+            while (parent != null) {
+
+                if (parent.className && L.DomUtil.hasClass(parent, className))
+                    return parent;
+
+                parent = parent.parentNode;
+
+            }
+
+            return false;
+
+        }
+
+
+    }
+
+    );
+
+
+//var huh = new MyCustomMarker("blah", {})
+
+var MyBoxClass = L.Class.extend({
+
+    options: {
+        width: 1,
+        height: 1
+    },
+
+    initialize: function(name, options) {
+        this.name = name;
+        L.setOptions(this, options);
+    }
+
+});
+
+var instance = new MyBoxClass('Red', {width: 10});
+
+
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-
 
 export class AppComponent implements AfterViewInit, OnInit {
     title = 'browser-app';
@@ -143,15 +262,32 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
 
 
+
     addMarkerToMap(label: Label) {
 
         const pos = L.latLng(label.y, label.x);
+/*
+        const oneMarker = new L.Marker(pos,{           title: label.text,
+            icon: this.yellowIcon,
+            draggable: true,
+        } )
+*/
 
         const oneMarker = new MyCustomMarker(pos, {
             title: label.text,
             icon: this.yellowIcon,
             draggable: true,
         });
+
+        //const oneMarker = new MyCustomMarker();
+        //oneMarker.position = pos;
+
+        /*
+        oneMarker.options = {           title: label.text,
+            icon: this.yellowIcon,
+            draggable: true,
+        }
+*/
 
         oneMarker.bindPopup('<b>' + label.id + '. ' + label.text + '</b>', {
             showOnMouseOver: true,
@@ -223,95 +359,4 @@ export class AppComponent implements AfterViewInit, OnInit {
 }
 
 
-// http://jsfiddle.net/sowelie/3JbNY/
-var MyCustomMarker = L.Marker.extend({
-
-    bindPopup: function (htmlContent, options) {
-
-        if (options && options.showOnMouseOver) {
-
-            // call the super method
-            L.Marker.prototype.bindPopup.apply(this, [htmlContent, options]);
-
-            // unbind the click event
-            this.off('click', this.openPopup, this);
-
-            // bind to mouse over
-            this.on('mouseover', function (e) {
-
-                // get the element that the mouse hovered onto
-                var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
-                var parent = this._getParent(target, 'leaflet-popup');
-
-                // check to see if the element is a popup, and if it is this marker's popup
-                if (parent == this._popup._container)
-                    return true;
-
-                // show the popup
-                this.openPopup();
-
-            }, this);
-
-            // and mouse out
-            this.on('mouseout', function (e) {
-
-                // get the element that the mouse hovered onto
-                var target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
-
-                // check to see if the element is a popup
-                if (this._getParent(target, 'leaflet-popup')) {
-
-                    L.DomEvent.on(this._popup._container, 'mouseout', this._popupMouseOut, this);
-                    return true;
-
-                }
-
-                // hide the popup
-                this.closePopup();
-
-            }, this);
-
-        }
-
-    },
-
-    _popupMouseOut: function (e) {
-
-        // detach the event
-        L.DomEvent.off(this._popup, 'mouseout', this._popupMouseOut, this);
-
-        // get the element that the mouse hovered onto
-        var target = e.toElement || e.relatedTarget;
-
-        // check to see if the element is a popup
-        if (this._getParent(target, 'leaflet-popup'))
-            return true;
-
-        // check to see if the marker was hovered back onto
-        if (target == this._icon)
-            return true;
-
-        // hide the popup
-        this.closePopup();
-
-    },
-
-    _getParent: function (element, className) {
-
-        var parent = element.parentNode;
-
-        while (parent != null) {
-
-            if (parent.className && L.DomUtil.hasClass(parent, className))
-                return parent;
-
-            parent = parent.parentNode;
-
-        }
-
-        return false;
-
-    }
-
-});
 
