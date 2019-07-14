@@ -28,7 +28,7 @@
 }
 
 .map-tab {
-  width: calc(350px - 0px);
+  width: calc(400px - 0px);
   height: 100%;
   background-color: tan;
 }
@@ -44,10 +44,12 @@
 }
 
 .map-picker {
+  overflow: auto; /* https://www.w3schools.com/cssref/tryit.asp?filename=trycss_overflow */
+
   position: absolute;
   left: 5;
-  height: 350px;
-  width: 350px;
+  height: 750px;
+  width: 400px;
   background-color: tan;
 }
 
@@ -80,6 +82,51 @@
 .round-tabs {
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
+}
+
+
+
+
+.map-item {
+  margin: auto;
+  padding: 15px;
+}
+
+
+.map-item:hover {
+  background-color: rgba(0,0,0,0.2) ;
+}
+
+.map-item.selected {
+  background-color: rgba(0,128,0,0.15) ;
+}
+.map-item.selected:hover {
+  background-color: rgba(0,128,0,0.3) ;
+}
+
+.map-thumb {
+  box-shadow: 0 10px 14px 0 rgba(0,0,0,0.6);
+  margin-bottom: 10px;
+}
+
+
+.map-label {
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+
+  font-size: 16pt;
+  padding: 6px;
+  color: black ;
+
+  border: 3px solid rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.1);
+}
+
+.map-label.selected {
+  border: 3px solid rgba(0,128,0,0.9);
+  background-color: rgba(128,255,128,0.5) ;
 }
 
 

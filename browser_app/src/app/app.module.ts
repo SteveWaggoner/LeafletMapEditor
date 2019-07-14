@@ -10,6 +10,7 @@ import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 
 import {LabelService} from './label.service';
 
+
 @NgModule({
     declarations: [
         AppComponent

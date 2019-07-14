@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, OnInit} from '@angular/core';
+import {Component, AfterViewInit, OnInit, OnDestroy} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {tileLayer, latLng, Map, icon} from 'leaflet';
@@ -14,8 +14,6 @@ import {Polygon} from 'tsgeo/Polygon';
 import {LabelService} from './label.service';
 import {Label} from './label';
 
-
-//     "@types/leaflet": "^1.4.4",
 
 
 // http://jsfiddle.net/sowelie/3JbNY/
@@ -114,33 +112,18 @@ var MyCustomMarker = L.Marker.extend({
     );
 
 
-//var huh = new MyCustomMarker("blah", {})
 
-var MyBoxClass = L.Class.extend({
-
-    options: {
-        width: 1,
-        height: 1
-    },
-
-    initialize: function(name, options) {
-        this.name = name;
-        L.setOptions(this, options);
-    }
-
-});
-
-var instance = new MyBoxClass('Red', {width: 10});
 
 
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'
+    ]
 })
 
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     title = 'browser-app';
 
 
@@ -159,7 +142,7 @@ export class AppComponent implements AfterViewInit, OnInit {
             {headerName: 'Lat', field: 'lat', width: 75, editable: false},
             {headerName: 'Lng', field: 'lng', width: 75, editable: false}
         ]
-    }
+    };
 
 
     private gridApi;
@@ -221,10 +204,52 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.addMarkerToMap(label);
     }
 
+    private _albums: Array = [];
 
     constructor(private labelService: LabelService) {
+
+   //     const pics = ["Williamson_Co_TN_1787","Davidson_Co_TN_1871",
+   //             "Rutherford_Co_TN_1871", "Camel", "Windmill"];
+
+        const pics = [{pic:"Davidson_Co_TN_1871",label:"Davidson County, Tennessee (1871)"},
+            {pic:"Rutherford_Co_TN_1871",label:"Rutherford County, Tennessee (1871)"},
+            {pic:"Williamson_Co_TN_1787",label:"Williamson County,Tennessee (1787)"},
+            {pic:"Camel",label:"Camel"},{pic:"Windmill",label:"Windmill"}];
+
+
+        for (let i = 0; i < pics.length; i++) {
+            const src = '../assets/images/' + pics[i].pic + '.jpg';
+            const caption = pics[i].label;
+            const thumb = '../assets/images/' + pics[i].pic + '.jpg';
+            const album = {
+                src: src,
+                caption: caption,
+                thumb: thumb
+            };
+
+            this._albums.push(album);
+        }
+
     }
 
+    last_selected_map = -1;
+    selectMap(evt, i:number) {
+        console.log("selectMap "+i+" "+evt);
+
+        var papa = evt.target.parentElement;
+
+        if ( !papa.classList.contains("map-item")) {
+            papa = papa.parentElement;
+        }
+
+
+        this.scroll(papa)
+        this.last_selected_map = i;
+    }
+
+    isMapSelected(i:number):boolean {
+        return i === this.last_selected_map;
+    }
 
     onGridReady(params) {
         console.log('grid ready')
@@ -356,6 +381,17 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.observableLabels.subscribe(labels => this.addMarkersToMap(labels));
 
     }
+
+
+
+    ngOnDestroy() {
+
+    }
+
+    scroll(el: HTMLElement) {
+        el.scrollIntoView({behavior: "smooth", block:"center"});
+    }
+
 }
 
 

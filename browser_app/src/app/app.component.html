@@ -1,4 +1,6 @@
 <div class="appbox column" style="height:calc(100vh - 20px);">
+
+
   <div class="header row">
 
     <div class="filler row">
@@ -39,13 +41,16 @@
     <div class="map-contents filler">
       <div class="map-picker"  style="z-index: 2;">
 
-<ag-grid-angular
-    style="width: 100%; height: 100%;"
-    class="ag-theme-balham"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
-    >
-</ag-grid-angular>
+        <div [ngClass]="{'map-item':true, 'selected': isMapSelected(i) }"  *ngFor="let image of _albums; let i=index">
+
+          <div class="map-thumb"  >
+            <img [src]="image.thumb"  alt="Avatar" title={{image.caption}} style="width:100%" (click)="selectMap($event,i)" />
+          </div>
+          <div [ngClass]="{'map-label':true, 'selected': isMapSelected(i) }" (click)="selectMap($event,i)">
+            <b>{{image.caption}}</b>
+          </div>
+
+        </div>
 
       </div>
 
