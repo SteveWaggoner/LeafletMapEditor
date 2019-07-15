@@ -28,7 +28,7 @@
 }
 
 .map-tab {
-  width: calc(400px - 0px);
+  width: calc(450px - 0px);
   height: 100%;
   background-color: tan;
 }
@@ -48,8 +48,8 @@
 
   position: absolute;
   left: 5;
-  height: 750px;
-  width: 400px;
+  height: 850px;
+  width: 450px;
   background-color: tan;
 }
 
@@ -131,3 +131,6 @@
 
 
 
+.hide {
+  visibility: hidden;
+}

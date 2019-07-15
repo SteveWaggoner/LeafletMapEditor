@@ -3,7 +3,6 @@ import {Http, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-// import 'rxjs/add/operator/toPromise';
 
 import {Label} from './label';
 
@@ -20,13 +19,8 @@ export class LabelService {
             .map(this.extractData)
             .catch(this.handleErrorObservable);
     }
-/*
-    getLabelsWithPromise(): Promise<Label[]> {
-        return this.http.get(this.url).toPromise()
-            .then(this.extractData)
-            .catch(this.handleErrorPromise);
-    }
-*/
+
+
     private extractData(res: Response) {
         const body = res.json();
         return body;
@@ -36,12 +30,7 @@ export class LabelService {
         console.error(error.message || error);
         return Observable.throw(error.message || error);
     }
-/*
-    private handleErrorPromise(error: Response | any) {
-        console.error(error.message || error);
-        return Promise.reject(error.message || error);
-    }
-*/
+
 }
 
 

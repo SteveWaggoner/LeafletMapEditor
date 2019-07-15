@@ -1,22 +1,19 @@
-import {Component, AfterViewInit, OnInit, OnDestroy} from '@angular/core';
+import {Component, AfterViewInit, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {tileLayer, latLng, Map, icon} from 'leaflet';
 
 import * as L from 'leaflet';
-// import 'leaflet-editable';
 
 import {Coordinate} from 'tsgeo/Coordinate';
 import {Vincenty} from 'tsgeo/Distance/Vincenty';
 import {Polygon} from 'tsgeo/Polygon';
 
-
 import {LabelService} from './label.service';
 import {Label} from './label';
 
 
-
-// http://jsfiddle.net/sowelie/3JbNY/
+// NOTE: need to be 'var' and not 'const' for some reason
 var MyCustomMarker = L.Marker.extend({
 
         bindPopup: function (htmlContent, options) {
@@ -33,12 +30,13 @@ var MyCustomMarker = L.Marker.extend({
                 this.on('mouseover', function (e) {
 
                     // get the element that the mouse hovered onto
-                    var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
-                    var parent = this._getParent(target, 'leaflet-popup');
+                    const target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
+                    const parent = this._getParent(target, 'leaflet-popup');
 
                     // check to see if the element is a popup, and if it is this marker's popup
-                    if (parent == this._popup._container)
+                    if (parent === this._popup._container) {
                         return true;
+                    }
 
                     // show the popup
                     this.openPopup();
@@ -49,7 +47,7 @@ var MyCustomMarker = L.Marker.extend({
                 this.on('mouseout', function (e) {
 
                     // get the element that the mouse hovered onto
-                    var target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
+                    const target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
 
                     // check to see if the element is a popup
                     if (this._getParent(target, 'leaflet-popup')) {
@@ -74,46 +72,40 @@ var MyCustomMarker = L.Marker.extend({
             L.DomEvent.off(this._popup, 'mouseout', this._popupMouseOut, this);
 
             // get the element that the mouse hovered onto
-            var target = e.toElement || e.relatedTarget;
+            const target = e.toElement || e.relatedTarget;
 
             // check to see if the element is a popup
-            if (this._getParent(target, 'leaflet-popup'))
+            if (this._getParent(target, 'leaflet-popup')) {
                 return true;
+            }
 
             // check to see if the marker was hovered back onto
-            if (target == this._icon)
+            if (target === this._icon) {
                 return true;
+            }
 
             // hide the popup
             this.closePopup();
-
         },
 
         _getParent: function (element, className) {
 
-            var parent = element.parentNode;
+            let parent = element.parentNode;
 
             while (parent != null) {
 
-                if (parent.className && L.DomUtil.hasClass(parent, className))
+                if (parent.className && L.DomUtil.hasClass(parent, className)) {
                     return parent;
+                }
 
                 parent = parent.parentNode;
 
             }
 
             return false;
-
         }
-
-
     }
-
-    );
-
-
-
-
+);
 
 
 @Component({
@@ -123,9 +115,8 @@ var MyCustomMarker = L.Marker.extend({
     ]
 })
 
-export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+export class AppComponent implements AfterViewInit, OnInit {
     title = 'browser-app';
-
 
     gridOptions = {
         animateRows: true,
@@ -204,23 +195,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.addMarkerToMap(label);
     }
 
-    private _albums: Array = [];
+    private _albums: Array<any> = [];
+
+
+    const pics = [{pic: 'Davidson_Co_TN_1871', label: 'Davidson County, Tennessee (1871)'},
+        {pic: 'Rutherford_Co_TN_1871', label: 'Rutherford County, Tennessee (1871)'},
+        {pic: 'Williamson_Co_TN_1787', label: 'Williamson County,Tennessee (1787)'},
+        {pic: 'Camel', label: 'Camel'}, {pic: 'Windmill', label: 'Windmill'}];
+
 
     constructor(private labelService: LabelService) {
 
-   //     const pics = ["Williamson_Co_TN_1787","Davidson_Co_TN_1871",
-   //             "Rutherford_Co_TN_1871", "Camel", "Windmill"];
 
-        const pics = [{pic:"Davidson_Co_TN_1871",label:"Davidson County, Tennessee (1871)"},
-            {pic:"Rutherford_Co_TN_1871",label:"Rutherford County, Tennessee (1871)"},
-            {pic:"Williamson_Co_TN_1787",label:"Williamson County,Tennessee (1787)"},
-            {pic:"Camel",label:"Camel"},{pic:"Windmill",label:"Windmill"}];
-
-
-        for (let i = 0; i < pics.length; i++) {
-            const src = '../assets/images/' + pics[i].pic + '.jpg';
-            const caption = pics[i].label;
-            const thumb = '../assets/images/' + pics[i].pic + '.jpg';
+        for (let i = 0; i < this.pics.length; i++) {
+            const src = '../assets/images/' + this.pics[i].pic + '.jpg';
+            const caption = this.pics[i].label;
+            const thumb = '../assets/images/' + this.pics[i].pic + '.jpg';
             const album = {
                 src: src,
                 caption: caption,
@@ -232,13 +222,31 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     }
 
+    hide_map_picker = true;
+
+
     last_selected_map = -1;
-    selectMap(evt, i:number) {
-        console.log("selectMap "+i+" "+evt);
 
-        var papa = evt.target.parentElement;
+    getMapCaption(): string {
+        if ( this.last_selected_map!=-1) {
+            return this.pics[this.last_selected_map].label;
+        } else {
+            return ''
+        }
 
-        if ( !papa.classList.contains("map-item")) {
+    }
+
+    toggleMapPicker() {
+        this.hide_map_picker = !this.hide_map_picker;
+        console.log(this.hide_map_picker)
+    }
+
+    selectMap(evt, i: number) {
+        console.log('selectMap ' + i + ' ' + evt);
+
+        let papa = evt.target.parentElement;
+
+        if (!papa.classList.contains('map-item')) {
             papa = papa.parentElement;
         }
 
@@ -247,12 +255,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.last_selected_map = i;
     }
 
-    isMapSelected(i:number):boolean {
+    isMapSelected(i: number): boolean {
         return i === this.last_selected_map;
     }
 
     onGridReady(params) {
-        console.log('grid ready')
+        console.log('grid ready');
         this.gridApi = params.api; // To access the grids API
     }
 
@@ -282,21 +290,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             mylastSelectedMarker[0] = selectedRow.marker;
             selectedRow.marker.setIcon(myblueIcon);
 
-
         });
     }
-
 
 
     addMarkerToMap(label: Label) {
 
         const pos = L.latLng(label.y, label.x);
-/*
-        const oneMarker = new L.Marker(pos,{           title: label.text,
-            icon: this.yellowIcon,
-            draggable: true,
-        } )
-*/
 
         const oneMarker = new MyCustomMarker(pos, {
             title: label.text,
@@ -304,15 +304,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             draggable: true,
         });
 
-        //const oneMarker = new MyCustomMarker();
-        //oneMarker.position = pos;
-
-        /*
-        oneMarker.options = {           title: label.text,
-            icon: this.yellowIcon,
-            draggable: true,
-        }
-*/
 
         oneMarker.bindPopup('<b>' + label.id + '. ' + label.text + '</b>', {
             showOnMouseOver: true,
@@ -379,17 +370,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         console.log(geofence.contains(insidePoint)); // returns bool(true) the point is inside the polygon
 
         this.observableLabels.subscribe(labels => this.addMarkersToMap(labels));
-
     }
 
-
-
-    ngOnDestroy() {
-
-    }
 
     scroll(el: HTMLElement) {
-        el.scrollIntoView({behavior: "smooth", block:"center"});
+        el.scrollIntoView({behavior: 'smooth', block: 'center'});
     }
 
 }

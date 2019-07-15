@@ -1,80 +1,82 @@
 <div class="appbox column" style="height:calc(100vh - 20px);">
 
 
-  <div class="header row">
+    <div class="header row">
 
-    <div class="filler row">
-      <div class="map-tab round-tabs row">
-        <div class="filler">
-          map tab
-        </div>
+        <div class="filler row">
+            <div class="map-tab round-tabs row">
+                <div class="filler map-item map-label selected">
+                    <b>{{getMapCaption()}}</b>
+                </div>
 
-        <div class="icon">
-          ^
-        </div>
-      </div>
-      <div class="tool-tab  row">
+                <div class="icon" (click)="toggleMapPicker()">
+                    ^
+                </div>
+            </div>
+            <div class="tool-tab  row">
 
-        <div class="icon">
-          A
-        </div>
-        <div class="icon">
-          D
-        </div>
-        <div class="icon">
-          M
-        </div>
-      </div>
+                <div class="icon">
+                    A
+                </div>
+                <div class="icon">
+                    D
+                </div>
+                <div class="icon">
+                    M
+                </div>
+            </div>
 
+        </div>
+        <div class="side-width search-tab round-tabs row">
+            <div class="icon">
+                >
+            </div>
+            <div class="filler">
+                search
+            </div>
+
+        </div>
     </div>
-    <div class="side-width search-tab round-tabs row">
-      <div class="icon">
-        >
-      </div>
-      <div class="filler">
-        search
-      </div>
+    <div class="content row" style="height: 85%; ">
+        <div class="map-contents filler">
+            <div [ngClass]="{'map-picker':true, 'hide': this.hide_map_picker}"  style="z-index: 2;">
 
-    </div>
-  </div>
-  <div class="content row" style="height: 85%; ">
-    <div class="map-contents filler">
-      <div class="map-picker"  style="z-index: 2;">
+                <div [ngClass]="{'map-item':true, 'selected': isMapSelected(i) }"
+                     *ngFor="let image of _albums; let i=index">
 
-        <div [ngClass]="{'map-item':true, 'selected': isMapSelected(i) }"  *ngFor="let image of _albums; let i=index">
+                    <div class="map-thumb">
+                        <img [src]="image.thumb" alt="Avatar" title={{image.caption}} style="width:100%"
+                             (click)="selectMap($event,i)"/>
+                    </div>
+                    <div [ngClass]="{'map-label':true, 'selected': isMapSelected(i) }" (click)="selectMap($event,i)">
+                        <b>{{image.caption}}</b>
+                    </div>
 
-          <div class="map-thumb"  >
-            <img [src]="image.thumb"  alt="Avatar" title={{image.caption}} style="width:100%" (click)="selectMap($event,i)" />
-          </div>
-          <div [ngClass]="{'map-label':true, 'selected': isMapSelected(i) }" (click)="selectMap($event,i)">
-            <b>{{image.caption}}</b>
-          </div>
+                </div>
+
+            </div>
+
+            <div style="width: 100%; height: 100%; z-index: 1;"
+                 leaflet
+                 [leafletOptions]="options"
+                 (leafletMapReady)="onMapReady($event)"
+                 (leafletClick)="onMapClick($event)">
+            </div>
 
         </div>
+        <div class="point-list side-width column">
 
-      </div>
+            <ag-grid-angular
+                    style="width: 100%; height: 100%;"
+                    class="ag-theme-balham"
+                    [gridOptions]="gridOptions"
+                    [rowData]="rowData"
+                    (gridReady)="onGridReady($event)"
+                    (rowSelected)="onRowSelected($event)"
+            >
+            </ag-grid-angular>
 
-<div style="width: 100%; height: 100%; z-index: 1;"
-     leaflet 
-     [leafletOptions]="options"
-     (leafletMapReady)="onMapReady($event)"
-     (leafletClick)="onMapClick($event)">
-</div>
-
+        </div>
     </div>
-    <div class="point-list side-width column">
-
-<ag-grid-angular
-    style="width: 100%; height: 100%;"
-    class="ag-theme-balham"
-    [gridOptions]="gridOptions"
-    [rowData]="rowData"
-    (gridReady)="onGridReady($event)"
-    (rowSelected)="onRowSelected($event)"
-    >
-</ag-grid-angular>
-
-    </div>
-  </div>
 </div>
 
