@@ -2,9 +2,6 @@ import database from '../../config/dbconfig';
 import { Promise } from 'bluebird';
 import { DaoError } from './daoError';
 
-/**
- * DAOs Common functions
- */
 export
 class DaoCommon {
 
@@ -74,6 +71,7 @@ class DaoCommon {
                 if (this.changes === 1) {
                     resolve(true);
                 } else if (this.changes === 0) {
+                    console.log(err)
                     reject(
                         new DaoError(21, "Entity not found")
                     )
